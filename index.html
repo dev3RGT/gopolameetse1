@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vynix Bet | Royal Blue Edition</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: {
+                        royal: {
+                            50: '#f0f4ff',
+                            100: '#d9e2ff',
+                            500: '#4169E1',
+                            600: '#3252cc',
+                            700: '#27408B',
+                            900: '#1a2a5e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes slideIn {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-match { animation: slideIn 0.3s ease-out forwards; }
+
+        @keyframes toastIn {
+            0% { transform: translate(-50%, 100%); }
+            100% { transform: translate(-50%, -20px); }
+        }
+        .bet-success-toast {
+            animation: toastIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .league-scroll { -webkit-overflow-scrolling: touch; }
+        .tab-view { display: none; animation: slideIn 0.3s ease-out forwards; }
+        .tab-view.active { display: block; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans pb-24 overflow-x-hidden">
+
+    <div id="success-toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-[100] bg-emerald-600 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 opacity-0 pointer-events-none transition-opacity duration-300">
+        <i class="fa-solid fa-circle-check"></i>
+        <span class="font-bold" id="toast-msg">Success!</span>
+    </div>
+
+    <header class="sticky top-0 z-40 bg-royal-500 shadow-xl px-4 py-3 flex justify-between items-center text-white">
+        <div class="flex items-center gap-2">
+            <div class="bg-white p-1.5 rounded-lg shadow-sm">
+                <i class="fa-solid fa-trophy text-royal-500 text-lg"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-extrabold leading-none tracking-tight">VYNIX<span class="text-royal-100">PRO</span></h1>
+                <p class="text-[9px] uppercase tracking-[0.2em] opacity-80">Elite Sportsbook</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <div onclick="toggleDepositModal()" class="bg-royal-700 px-3 py-1.5 rounded-xl border border-royal-100/20 text-right cursor-pointer hover:bg-royal-600 active:scale-95 transition-all">
+                <p class="text-[9px] text-emerald-400 uppercase font-bold flex items-center justify-end gap-1"><i class="fa-solid fa-plus"></i> Load Funds</p>
+                <p class="font-black text-sm user-balance-display">R 1,250.00</p>
+            </div>
+            <button class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 active:scale-90 transition">
+                <i class="fa-solid fa-bell"></i>
+            </button>
+        </div>
+    </header>
+
+    <div id="deposit-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[90] opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+        <div class="bg-white rounded-[2rem] p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-transform duration-300" id="deposit-card">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-2">
+                    <div class="bg-emerald-100 p-2 rounded-xl text-emerald-600">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-800">Mock Deposit</h3>
+                </div>
+                <button onclick="toggleDepositModal()" class="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 transition"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="space-y-5">
+                <div class="bg-slate-50 p-4 rounded-2xl border-2 border-slate-100 focus-within:border-emerald-500 transition-colors">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Amount to load (ZAR)</p>
+                    <input type="number" id="deposit-amount" placeholder="e.g. 500" class="w-full bg-transparent font-black text-3xl outline-none text-slate-800 placeholder-slate-300">
+                </div>
+                
+                <div class="flex gap-2">
+                    <button onclick="setDepositAmount(100)" class="flex-1 bg-white text-slate-600 font-bold py-2.5 rounded-xl text-sm border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition-all">+R100</button>
+                    <button onclick="setDepositAmount(500)" class="flex-1 bg-white text-slate-600 font-bold py-2.5 rounded-xl text-sm border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition-all">+R500</button>
+                    <button onclick="setDepositAmount(1000)" class="flex-1 bg-white text-slate-600 font-bold py-2.5 rounded-xl text-sm border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition-all">+R1000</button>
+                </div>
+                
+                <button onclick="processMockDeposit()" class="w-full bg-emerald-500 text-white font-black py-4 rounded-2xl shadow-xl shadow-emerald-500/30 hover:bg-emerald-600 active:scale-95 transition-all uppercase tracking-widest mt-2">
+                    Confirm Deposit
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <main class="max-w-2xl mx-auto">
+        
+        <div id="view-home" class="tab-view active p-4 space-y-5">
+            <div class="relative group">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" id="match-search" placeholder="Search teams or basketball leagues..." class="w-full bg-white border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 focus:outline-none focus:ring-4 focus:ring-royal-500/10 focus:border-royal-500 transition shadow-sm">
+            </div>
+
+            <div class="flex gap-3 overflow-x-auto no-scrollbar py-1">
+                <button class="cat-btn flex items-center gap-2 px-6 py-2.5 bg-royal-500 text-white rounded-2xl font-bold shadow-lg shadow-royal-500/30 transition-all whitespace-nowrap">
+                    <i class="fa-solid fa-basketball"></i> Global Hoops
+                </button>
+            </div>
+
+            <div class="relative">
+                <div class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none"></div>
+                <div id="league-filters" class="flex gap-2 overflow-x-auto no-scrollbar league-scroll py-1 pb-2"></div>
+                <div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none"></div>
+            </div>
+
+            <div class="flex justify-between items-center pt-2">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-earth-americas text-royal-500 text-lg"></i>
+                    <h3 class="font-extrabold text-xl text-slate-800" id="feed-title">All Basketball Games</h3>
+                </div>
+                <button onclick="fetchMatches()" class="text-royal-500 font-bold text-sm flex items-center gap-1.5 hover:bg-royal-50 px-3 py-1 rounded-lg transition border border-royal-100">
+                    <i class="fa-solid fa-rotate" id="refresh-icon"></i>
+                </button>
+            </div>
+
+            <div id="matches-feed" class="space-y-4">
+                <div class="bg-white h-48 rounded-3xl animate-pulse border border-slate-100"></div>
+                <div class="bg-white h-48 rounded-3xl animate-pulse border border-slate-100"></div>
+            </div>
+        </div>
+
+        <div id="view-history" class="tab-view p-4 space-y-5">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-royal-100 p-3 rounded-xl text-royal-600">
+                    <i class="fa-solid fa-clock-rotate-left text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-black text-slate-800">Bet History</h2>
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Your past slips</p>
+                </div>
+            </div>
+
+            <div id="history-feed" class="space-y-4">
+                <div class="text-center py-12">
+                    <i class="fa-solid fa-receipt text-5xl text-slate-200 mb-3"></i>
+                    <p class="text-slate-400 font-bold">No bets placed yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-profile" class="tab-view p-4 space-y-6">
+            <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-200 text-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-r from-royal-500 to-royal-700"></div>
+                
+                <div class="relative z-10">
+                    <div class="w-24 h-24 mx-auto bg-slate-100 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-3xl text-royal-500 font-black mb-3 mt-4 overflow-hidden">
+                        KF
+                    </div>
+                    <h2 class="text-2xl font-black text-slate-800">Katlego Frans</h2>
+                    <p class="text-xs font-bold text-royal-500 bg-royal-50 inline-block px-3 py-1 rounded-full border border-royal-100 mt-1">Software Developer</p>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-widest mt-2">User ID: VYN-8849-KF</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-white rounded-[1.5rem] p-4 border border-slate-200 shadow-sm flex flex-col justify-center items-center">
+                    <i class="fa-solid fa-wallet text-emerald-500 text-xl mb-2"></i>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Available Funds</p>
+                    <p class="text-lg font-black text-slate-800 mt-1 user-balance-display">R 1,250.00</p>
+                </div>
+                <div class="bg-white rounded-[1.5rem] p-4 border border-slate-200 shadow-sm flex flex-col justify-center items-center">
+                    <i class="fa-solid fa-ticket text-royal-500 text-xl mb-2"></i>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total Bets</p>
+                    <p class="text-lg font-black text-slate-800 mt-1" id="profile-total-bets">0</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[2rem] border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-4 border-b border-slate-100 flex items-center justify-between hover:bg-slate-50 cursor-pointer transition">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-slate-100 w-10 h-10 rounded-full flex items-center justify-center text-slate-600"><i class="fa-solid fa-gear"></i></div>
+                        <span class="font-bold text-slate-700">Account Settings</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-300"></i>
+                </div>
+                <div class="p-4 border-b border-slate-100 flex items-center justify-between hover:bg-slate-50 cursor-pointer transition">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-slate-100 w-10 h-10 rounded-full flex items-center justify-center text-slate-600"><i class="fa-solid fa-shield-halved"></i></div>
+                        <span class="font-bold text-slate-700">Security & Privacy</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-300"></i>
+                </div>
+                <div class="p-4 flex items-center justify-between hover:bg-slate-50 cursor-pointer transition">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-red-50 w-10 h-10 rounded-full flex items-center justify-center text-red-500"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+                        <span class="font-bold text-red-500">Sign Out</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <nav class="fixed bottom-0 w-full bg-white/90 backdrop-blur-xl border-t border-slate-200 h-20 flex justify-around items-center px-4 z-50">
+        <div onclick="switchTab('home')" id="nav-home" class="nav-btn flex flex-col items-center text-royal-500 cursor-pointer transition">
+            <i class="fa-solid fa-house-chimney text-xl"></i>
+            <span class="text-[10px] font-bold mt-1">Home</span>
+        </div>
+        
+        <div class="relative -top-8">
+            <button onclick="toggleSlip()" class="w-16 h-16 bg-royal-500 rounded-3xl shadow-2xl shadow-royal-500/40 flex items-center justify-center text-white border-4 border-slate-50 active:scale-90 transition-transform">
+                <div class="relative">
+                    <i class="fa-solid fa-receipt text-2xl"></i>
+                    <span id="slip-count" class="absolute -top-3 -right-3 bg-red-500 text-white text-[10px] font-black w-6 h-6 flex items-center justify-center rounded-full border-2 border-white hidden">0</span>
+                </div>
+            </button>
+        </div>
+
+        <div onclick="switchTab('history')" id="nav-history" class="nav-btn flex flex-col items-center text-slate-400 hover:text-royal-500 cursor-pointer transition">
+            <i class="fa-solid fa-clock-rotate-left text-xl"></i>
+            <span class="text-[10px] font-bold mt-1">History</span>
+        </div>
+        <div onclick="switchTab('profile')" id="nav-profile" class="nav-btn flex flex-col items-center text-slate-400 hover:text-royal-500 cursor-pointer transition">
+            <i class="fa-solid fa-user-gear text-xl"></i>
+            <span class="text-[10px] font-bold mt-1">Profile</span>
+        </div>
+    </nav>
+
+    <div id="slip-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] opacity-0 pointer-events-none transition-all duration-300" onclick="toggleSlip()"></div>
+    
+    <div id="slip-drawer" class="fixed bottom-0 left-0 w-full bg-white rounded-t-[2.5rem] z-[70] transform translate-y-full transition-transform duration-500 shadow-2xl flex flex-col max-h-[85vh]">
+        <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+            <h2 class="text-2xl font-black text-slate-800">My Bet Slip</h2>
+            <button onclick="toggleSlip()" class="bg-slate-100 w-10 h-10 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="p-6 flex-1 overflow-y-auto no-scrollbar" id="slip-items">
+            <div class="text-center py-10 text-slate-400" id="slip-empty">
+                <i class="fa-solid fa-basketball text-6xl opacity-20 mb-4"></i>
+                <p class="font-bold">Select basketball games to bet</p>
+            </div>
+            <div id="active-selections" class="space-y-4 hidden"></div>
+        </div>
+
+        <div class="p-6 bg-slate-50 border-t border-slate-200 hidden" id="slip-summary">
+            <div class="flex justify-between mb-4">
+                <span class="text-slate-500 font-bold uppercase text-xs tracking-widest">Total Odds</span>
+                <span class="font-black text-royal-500 text-xl" id="slip-odds">0.00</span>
+            </div>
+            <div class="flex gap-4 mb-6">
+                <div class="flex-1 bg-white p-3 rounded-2xl border-2 border-slate-200 focus-within:border-royal-500 transition">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Stake (ZAR)</p>
+                    <input type="number" id="stake-amount" value="100" oninput="updateReturn()" class="w-full bg-transparent font-black text-lg outline-none">
+                </div>
+                <div class="flex-1 bg-royal-100/30 p-3 rounded-2xl border border-royal-200">
+                    <p class="text-[10px] font-bold text-royal-600 uppercase mb-1">Returns</p>
+                    <p class="font-black text-lg text-royal-700" id="slip-return">R 0.00</p>
+                </div>
+            </div>
+            <button onclick="placeBet()" class="w-full bg-royal-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-royal-500/40 hover:bg-royal-600 active:scale-95 transition-all uppercase tracking-widest">
+                Place Bet Now
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = "d7a9fab6d8a9c0d575b95e071332c189";
+        let matches = [];
+        let slip = [];
+        let betHistory = [];
+        let balance = 1250.00;
+        let currentLeagueFilter = 'All';
+
+        // --- Navigation Logic ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-view').forEach(el => el.classList.remove('active'));
+            document.getElementById(`view-${tabId}`).classList.add('active');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-royal-500');
+                btn.classList.add('text-slate-400');
+            });
+            document.getElementById(`nav-${tabId}`).classList.remove('text-slate-400');
+            document.getElementById(`nav-${tabId}`).classList.add('text-royal-500');
+            
+            if(tabId === 'history') renderHistory();
+        }
+
+        // --- Mock Wallet Logic ---
+        function toggleDepositModal() {
+            const modal = document.getElementById('deposit-modal');
+            const card = document.getElementById('deposit-card');
+            
+            if (modal.classList.contains('opacity-0')) {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                setTimeout(() => card.classList.remove('scale-95'), 10);
+            } else {
+                card.classList.add('scale-95');
+                setTimeout(() => modal.classList.add('opacity-0', 'pointer-events-none'), 150);
+            }
+        }
+
+        function setDepositAmount(amount) {
+            document.getElementById('deposit-amount').value = amount;
+        }
+
+        function updateBalanceDisplays() {
+            const formatted = `R ${balance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.querySelectorAll('.user-balance-display').forEach(el => el.innerText = formatted);
+        }
+
+        function processMockDeposit() {
+            const amount = parseFloat(document.getElementById('deposit-amount').value);
+            if (isNaN(amount) || amount <= 0) return alert("Please enter a valid amount.");
+
+            balance += amount;
+            updateBalanceDisplays();
+            toggleDepositModal();
+            document.getElementById('deposit-amount').value = '';
+            showToast(`Loaded R ${amount.toFixed(2)} Successfully!`);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('success-toast');
+            document.getElementById('toast-msg').innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('bet-success-toast');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+                toast.classList.remove('bet-success-toast');
+            }, 3000);
+        }
+
+        // --- Fetch & Render Basketball API ---
+        async function fetchMatches() {
+            const feed = document.getElementById('matches-feed');
+            const icon = document.getElementById('refresh-icon');
+            icon.classList.add('fa-spin');
+
+            try {
+                // Using Basketball API endpoint
+                const todayDate = new Date().toISOString().split('T')[0];
+                const response = await fetch(`https://v1.basketball.api-sports.io/games?date=${todayDate}`, {
+                    headers: { 'x-apisports-key': API_KEY }
+                });
+                const data = await response.json();
+                matches = data.response || [];
+                
+                generateLeagueFilters(matches);
+                filterAndRender();
+            } catch (err) {
+                feed.innerHTML = `<p class="text-center text-red-500 font-bold p-10">Error loading basketball games. Check API key.</p>`;
+            } finally {
+                icon.classList.remove('fa-spin');
+            }
+        }
+
+        function generateLeagueFilters(data) {
+            const filterContainer = document.getElementById('league-filters');
+            const uniqueLeagues = [...new Set(data.map(m => m.league.name))].sort();
+            
+            let html = `<button onclick="setLeagueFilter('All')" class="league-btn px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${currentLeagueFilter === 'All' ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-500 border-slate-200'}">🏀 All Leagues</button>`;
+
+            uniqueLeagues.forEach(league => {
+                const isActive = currentLeagueFilter === league;
+                html += `<button onclick="setLeagueFilter('${league.replace(/'/g, "\\'")}')" class="league-btn px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${isActive ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-500 border-slate-200'}">${league}</button>`;
+            });
+            filterContainer.innerHTML = html;
+        }
+
+        function setLeagueFilter(league) {
+            currentLeagueFilter = league;
+            generateLeagueFilters(matches);
+            document.getElementById('feed-title').innerText = league === 'All' ? 'All Basketball Games' : league;
+            filterAndRender();
+        }
+
+        function filterAndRender() {
+            let filtered = matches;
+            if (currentLeagueFilter !== 'All') filtered = matches.filter(m => m.league.name === currentLeagueFilter);
+
+            const term = document.getElementById('match-search').value.toLowerCase();
+            if (term) {
+                filtered = filtered.filter(m => m.teams.home.name.toLowerCase().includes(term) || m.teams.away.name.toLowerCase().includes(term) || m.league.name.toLowerCase().includes(term));
+            }
+            renderMatches(filtered);
+        }
+
+        function renderMatches(data) {
+            const feed = document.getElementById('matches-feed');
+            feed.innerHTML = '';
+
+            if(data.length === 0) {
+                feed.innerHTML = `<div class="bg-white p-10 rounded-3xl text-center border-2 border-dashed border-slate-200"><p class="text-slate-400 font-bold">No games found.</p></div>`;
+                return;
+            }
+
+            data.forEach((m, idx) => {
+                const home = m.teams.home;
+                const away = m.teams.away;
+                const statusShort = m.status.short;
+                const league = m.league.name;
+                const country = m.country ? m.country.name : '';
+                
+                let statusBadge = '';
+                let homeScore = m.scores.home.total !== null ? m.scores.home.total : '-';
+                let awayScore = m.scores.away.total !== null ? m.scores.away.total : '-';
+
+                if (statusShort === 'NS' || statusShort === 'TBD') {
+                    const matchTime = new Date(m.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    statusBadge = `<span class="bg-slate-100 text-slate-600 text-[10px] font-black px-2 py-1 rounded-lg border border-slate-200">Upcoming ${matchTime}</span>`;
+                } else if (['FT', 'AOT'].includes(statusShort)) {
+                    statusBadge = `<span class="bg-slate-800 text-white text-[10px] font-black px-2 py-1 rounded-lg">FT</span>`;
+                } else {
+                    statusBadge = `<span class="bg-red-50 text-red-600 border border-red-100 text-[10px] font-black px-2 py-1 rounded-lg flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.5)]"></span> Live</span>`;
+                }
+
+                // Mock odds for basketball (1 = Home, 2 = Away)
+                const o1 = (1.1 + Math.random() * 2).toFixed(2);
+                const o2 = (1.1 + Math.random() * 2).toFixed(2);
+
+                const card = `
+                    <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-200 animate-match" style="animation-delay: ${Math.min(idx * 0.05, 0.5)}s">
+                        <div class="flex justify-between items-center mb-4 border-b border-slate-50 pb-3">
+                            <div class="flex flex-col">
+                                <span class="text-[11px] font-black text-slate-800 uppercase tracking-tighter truncate max-w-[150px]">${league}</span>
+                                <span class="text-[9px] font-bold text-slate-400 uppercase">${country}</span>
+                            </div>
+                            ${statusBadge}
+                        </div>
+                        <div class="flex justify-between items-center px-2 mb-6">
+                            <div class="flex flex-col items-center gap-2 w-1/3">
+                                <div class="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center p-2 border border-slate-100">
+                                    <img src="${home.logo}" class="w-full h-full object-contain" onerror="this.src='https://via.placeholder.com/50?text=Home'">
+                                </div>
+                                <p class="text-[11px] font-bold text-center leading-tight line-clamp-2">${home.name}</p>
+                            </div>
+                            <div class="flex flex-col items-center w-1/3">
+                                <p class="text-3xl font-black text-royal-500 tracking-tighter">${homeScore} <span class="text-slate-300 text-lg">-</span> ${awayScore}</p>
+                            </div>
+                            <div class="flex flex-col items-center gap-2 w-1/3">
+                                <div class="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center p-2 border border-slate-100">
+                                    <img src="${away.logo}" class="w-full h-full object-contain" onerror="this.src='https://via.placeholder.com/50?text=Away'">
+                                </div>
+                                <p class="text-[11px] font-bold text-center leading-tight line-clamp-2">${away.name}</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 bg-slate-50 p-1.5 rounded-3xl border border-slate-100">
+                            ${oddBtn(m.id, home.name, o1, 'Home')}
+                            ${oddBtn(m.id, away.name, o2, 'Away')}
+                        </div>
+                    </div>
+                `;
+                feed.insertAdjacentHTML('beforeend', card);
+            });
+        }
+
+        function oddBtn(id, name, val, label) {
+            const isActive = slip.some(b => b.id === `${id}-${name}`);
+            return `
+                <button onclick="addToSlip('${id}', '${name.replace(/'/g, "\\'")}', ${val}, this)" 
+                        class="odd-trigger group flex flex-col items-center py-2.5 rounded-[1.25rem] transition-all 
+                        ${isActive ? 'bg-royal-500 text-white shadow-md shadow-royal-500/20' : 'bg-white text-slate-800 hover:bg-slate-100 border border-slate-200'}">
+                    <span class="text-[9px] font-bold ${isActive ? 'text-royal-100' : 'text-slate-400'} uppercase tracking-wider">${label}</span>
+                    <span class="font-black text-sm">${val}</span>
+                </button>
+            `;
+        }
+
+        // --- Bet Slip & History Logic ---
+        function addToSlip(mId, selection, odds) {
+            const bId = `${mId}-${selection}`;
+            const exists = slip.findIndex(b => b.id === bId);
+            if(exists > -1) slip.splice(exists, 1);
+            else slip.push({ id: bId, selection, odds });
+            
+            updateSlipUI();
+            filterAndRender();
+        }
+
+        function updateSlipUI() {
+            const count = document.getElementById('slip-count');
+            const empty = document.getElementById('slip-empty');
+            const active = document.getElementById('active-selections');
+            const summary = document.getElementById('slip-summary');
+            
+            count.innerText = slip.length;
+            count.classList.toggle('hidden', slip.length === 0);
+            
+            if(slip.length === 0) {
+                empty.classList.remove('hidden');
+                active.classList.add('hidden');
+                summary.classList.add('hidden');
+            } else {
+                empty.classList.add('hidden');
+                active.classList.remove('hidden');
+                summary.classList.remove('hidden');
+                
+                active.innerHTML = slip.map((b, i) => `
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 flex justify-between items-center shadow-sm">
+                        <div class="max-w-[60%]">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Selection</p>
+                            <p class="font-black text-slate-800 truncate">${b.selection}</p>
+                        </div>
+                        <div class="text-right flex-1">
+                            <p class="text-[10px] font-bold text-royal-500 uppercase tracking-wider">Odds</p>
+                            <p class="font-black text-lg leading-none">${b.odds}</p>
+                        </div>
+                        <button onclick="removeFromSlip(${i})" class="text-slate-300 hover:text-red-500 ml-4 p-2 transition bg-slate-50 rounded-full"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                `).join('');
+            }
+            updateReturn();
+        }
+
+        function updateReturn() {
+            const oddsEl = document.getElementById('slip-odds');
+            const returnEl = document.getElementById('slip-return');
+            const stake = parseFloat(document.getElementById('stake-amount').value) || 0;
+            
+            const totalOdds = slip.reduce((acc, curr) => acc * curr.odds, 1);
+            oddsEl.innerText = slip.length > 0 ? totalOdds.toFixed(2) : '0.00';
+            returnEl.innerText = `R ${(totalOdds * stake).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            return { totalOdds, returnAmt: totalOdds * stake };
+        }
+
+        function removeFromSlip(idx) {
+            slip.splice(idx, 1);
+            updateSlipUI();
+            filterAndRender();
+        }
+
+        function toggleSlip() {
+            const drawer = document.getElementById('slip-drawer');
+            const overlay = document.getElementById('slip-overlay');
+            drawer.classList.toggle('translate-y-full');
+            overlay.classList.toggle('opacity-0');
+            overlay.classList.toggle('pointer-events-none');
+        }
+
+        function placeBet() {
+            const stake = parseFloat(document.getElementById('stake-amount').value);
+            if(stake > balance) {
+                alert("Insufficient funds! Tap 'Load Funds' in the header.");
+                return;
+            }
+            if(slip.length === 0) return;
+
+            const calc = updateReturn();
+            
+            // Deduct and update UI
+            balance -= stake;
+            updateBalanceDisplays();
+            
+            // Push to History
+            const timestamp = new Date().toLocaleString([], {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
+            betHistory.unshift({
+                date: timestamp,
+                stake: stake,
+                odds: calc.totalOdds.toFixed(2),
+                returns: calc.returnAmt,
+                items: [...slip]
+            });
+
+            // Update Profile Stats
+            document.getElementById('profile-total-bets').innerText = betHistory.length;
+
+            toggleSlip();
+            showToast('Bet Placed Successfully!');
+
+            setTimeout(() => {
+                slip = [];
+                updateSlipUI();
+                filterAndRender();
+            }, 300);
+        }
+
+        function renderHistory() {
+            const feed = document.getElementById('history-feed');
+            if(betHistory.length === 0) return;
+
+            feed.innerHTML = betHistory.map((bet, i) => `
+                <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm animate-match" style="animation-delay: ${i * 0.05}s">
+                    <div class="flex justify-between items-center mb-4 border-b border-slate-50 pb-3">
+                        <span class="text-xs font-bold text-slate-500">${bet.date}</span>
+                        <span class="bg-amber-50 text-amber-600 border border-amber-100 text-[10px] font-black px-2 py-1 rounded-lg">Pending</span>
+                    </div>
+                    
+                    <div class="space-y-2 mb-4">
+                        ${bet.items.map(item => `
+                            <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                <span class="text-sm font-bold text-slate-700 truncate pr-2">${item.selection}</span>
+                                <span class="font-black text-royal-500">${item.odds}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="flex justify-between items-end pt-2 border-t border-slate-50">
+                        <div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Stake</p>
+                            <p class="font-bold text-slate-800">R ${bet.stake.toFixed(2)}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Potential Return</p>
+                            <p class="font-black text-lg text-emerald-600">R ${bet.returns.toFixed(2)}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('match-search').addEventListener('input', filterAndRender);
+        updateBalanceDisplays(); // Init balance text
+        fetchMatches();
+        setInterval(fetchMatches, 60000);
+    </script>
+</body>
+</html>
