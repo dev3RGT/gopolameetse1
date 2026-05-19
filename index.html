@@ -34,26 +34,30 @@
       overflow-x: hidden;
     }
 
-    /* ── NAV ── */
+    /* ── NAV REDESIGN ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.6rem 5%;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 1.8rem 5%;
       background: transparent;
-      transition: background 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
+      transition: background 0.4s cubic-bezier(0.25, 1, 0.5, 1), padding 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
     }
     nav.scrolled {
-      background: rgba(255,255,255,0.97);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(255, 255, 255, 0.93);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       padding: 1rem 5%;
-      box-shadow: 0 2px 32px rgba(6,48,63,0.10);
+      box-shadow: 0 10px 40px rgba(6, 48, 63, 0.06);
+      border-bottom: 1px solid rgba(26, 110, 142, 0.05);
     }
 
-    /* Logo */
+    /* Logo Alignment */
     .nav-logo {
-      display: flex; align-items: center; gap: 0.55rem;
+      display: inline-flex; align-items: center; gap: 0.65rem;
       text-decoration: none; flex-shrink: 0;
+      justify-self: start;
     }
     .nav-logo-mark {
       position: relative;
@@ -69,7 +73,7 @@
     }
     .nav-logo-name {
       font-family: 'Playfair Display', serif;
-      font-size: 1.1rem; font-weight: 700;
+      font-size: 1.15rem; font-weight: 700;
       color: white;
       letter-spacing: -0.01em;
       white-space: nowrap;
@@ -79,34 +83,34 @@
     .nav-logo-sub {
       font-size: 0.62rem; font-weight: 500;
       letter-spacing: 0.14em; text-transform: uppercase;
-      color: rgba(255,255,255,0.55);
+      color: rgba(255,255,255,0.6);
       transition: color 0.4s;
     }
     nav.scrolled .nav-logo-name { color: var(--water-dark); }
-    nav.scrolled .nav-logo-name span { color: var(--accent); }
+    nav.scrolled .nav-logo-name span { color: var(--water); }
     nav.scrolled .nav-logo-sub { color: var(--muted); }
 
-    /* Links */
+    /* Links Centering & Anti-Overlap */
     .nav-links {
-      display: flex; align-items: center; gap: 0;
+      display: flex; align-items: center; gap: 0.35rem;
       list-style: none;
-      position: absolute; left: 50%; transform: translateX(-50%);
+      justify-self: center;
+      white-space: nowrap;
     }
     .nav-links li { display: list-item; }
     .nav-links a {
       display: inline-block;
       text-decoration: none;
-      color: rgba(255,255,255,0.82);
+      color: rgba(255,255,255,0.85);
       font-size: 0.875rem; font-weight: 500;
-      padding: 0.4rem 1.1rem;
+      padding: 0.5rem 1.2rem;
       border-radius: 50px;
       transition: color 0.25s, background 0.25s;
       position: relative;
-      white-space: nowrap;
     }
     .nav-links a:hover {
       color: white;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.12);
     }
     nav.scrolled .nav-links a { color: var(--muted); }
     nav.scrolled .nav-links a:hover {
@@ -114,18 +118,19 @@
       background: var(--sky);
     }
 
-    /* CTA button */
+    /* CTA Button Alignment */
     .btn-nav {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      padding: 0.6rem 1.4rem;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.65rem 1.5rem;
       background: transparent;
       color: white !important;
       font-family: 'DM Sans', sans-serif;
       font-weight: 500; font-size: 0.875rem;
-      border: 1.5px solid rgba(255,255,255,0.55);
+      border: 1.5px solid rgba(255,255,255,0.6);
       border-radius: 50px; cursor: pointer;
       text-decoration: none;
       white-space: nowrap; flex-shrink: 0;
+      justify-self: end;
       transition: background 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s, transform 0.25s;
     }
     .btn-nav svg { width: 15px; height: 15px; fill: white; transition: fill 0.25s; flex-shrink: 0; }
@@ -141,13 +146,14 @@
       background: var(--water);
       border-color: var(--water);
       color: white !important;
-      box-shadow: 0 2px 14px rgba(26,110,142,0.28);
+      box-shadow: 0 4px 14px rgba(26,110,142,0.2);
     }
     nav.scrolled .btn-nav svg { fill: white; }
     nav.scrolled .btn-nav:hover {
       background: var(--water-dark);
       border-color: var(--water-dark);
-      box-shadow: 0 4px 20px rgba(26,110,142,0.38);
+      box-shadow: 0 6px 20px rgba(26,110,142,0.3);
+      transform: translateY(-1px);
     }
 
     /* ── HERO ── */
@@ -735,13 +741,13 @@
       .hero-stats { display: grid; grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 768px) {
+      nav { display: flex; justify-content: space-between; }
       .nav-links { display: none; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── NAV ── -->
 <nav id="mainNav">
   <a href="#hero" class="nav-logo">
     <div class="nav-logo-mark">
@@ -769,7 +775,6 @@
   </a>
 </nav>
 
-<!-- ── HERO ── -->
 <section id="hero">
   <div class="hero-bg"></div>
   <div class="ripple-overlay"></div>
@@ -825,7 +830,6 @@
   </div>
 </section>
 
-<!-- ── ABOUT ── -->
 <section id="about">
   <div class="about-visual fade-in">
     <div class="about-img-wrap">
@@ -856,7 +860,6 @@
   </div>
 </section>
 
-<!-- ── SERVICES ── -->
 <section id="services">
   <div class="section-header fade-in">
     <span class="section-tag">What We Do</span>
@@ -925,7 +928,6 @@
   </div>
 </section>
 
-<!-- ── WHY US ── -->
 <section id="why">
   <div class="why-grid">
     <div>
@@ -981,7 +983,6 @@
   </div>
 </section>
 
-<!-- ── CONTACT ── -->
 <section id="contact">
   <div class="section-header fade-in">
     <span class="section-tag">Get In Touch</span>
@@ -1070,7 +1071,6 @@
   </div>
 </section>
 
-<!-- ── FOOTER ── -->
 <footer>
   <div class="footer-top">
     <div class="footer-logo">Gopola <span>Meetse</span></div>
