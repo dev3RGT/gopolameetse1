@@ -86,7 +86,7 @@
 
     h2.display {
       font-family: var(--ff-display);
-      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-size: clamp(1.8rem, 5vw, 3.4rem);
       font-weight: 700; line-height: 1.12;
       color: var(--deep-dark);
     }
@@ -243,7 +243,7 @@
     .hero-h1 {
       position: relative; z-index: 1;
       font-family: var(--ff-display);
-      font-size: clamp(3rem, 5.5vw, 5.2rem);
+      font-size: clamp(2.2rem, 8vw, 5.2rem);
       font-weight: 700;
       color: white;
       line-height: 1.05;
@@ -798,40 +798,73 @@
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 1024px) {
-      #hero { grid-template-columns: 1fr; }
+      #hero { grid-template-columns: 1fr; min-height: auto; }
       .hero-left {
         clip-path: none;
-        min-height: 100vh;
-        padding-top: 9rem;
+        min-height: auto;
+        padding: 130px 7% 70px 7%;
         background: linear-gradient(160deg, var(--deep-dark) 0%, var(--deep) 100%);
       }
       .hero-right {
-        display: none;
+        display: block;
+        height: 420px;
+        position: relative;
       }
+      .hero-floats {
+        bottom: 6%;
+      }
+      .hero-scroll { display: none; }
       .services-grid { grid-template-columns: 1fr 1fr; }
-      .process-steps { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .process-steps { grid-template-columns: 1fr 1fr; gap: 3rem 2rem; }
       .process-steps::before { display: none; }
-      #intro { grid-template-columns: 1fr; gap: 3rem; }
+      #intro { grid-template-columns: 1fr; gap: 3.5rem; }
       #band { grid-template-columns: 1fr; gap: 3rem; }
       .footer-top { grid-template-columns: 1fr 1fr; }
     }
+
     @media (max-width: 768px) {
+      #intro, #services, #process, #reviews, #contact, #band { padding: 4.5rem 6%; }
       .nav-center { display: none; }
       .services-grid { grid-template-columns: 1fr; }
       .reviews-grid { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 3.5rem; }
       .footer-top { grid-template-columns: 1fr 1fr; }
       .form-row { grid-template-columns: 1fr; }
     }
+
+    @media (max-width: 540px) {
+      .process-steps { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
     @media (max-width: 500px) {
-      .footer-top { grid-template-columns: 1fr; }
-      .hero-floats { flex-direction: column; align-items: center; }
+      #nav { padding: 0 4%; }
+      .nl-secondary { display: none; }
+      .nl-primary { font-size: 1.1rem; }
+      .nav-cta { padding: 0.45rem 0.95rem; font-size: 0.76rem; }
+      .hero-floats { 
+        flex-direction: row; 
+        flex-wrap: wrap; 
+        justify-content: center; 
+        width: 90%; 
+        bottom: 5%; 
+      }
+      .float-card { 
+        min-width: 95px; 
+        padding: 0.6rem 0.8rem; 
+        flex: 1 1 28%;
+      }
+      .float-card strong { font-size: 1.5rem; }
+      .float-card span { font-size: 0.65rem; }
+      .intro-numbers { grid-template-columns: 1fr; }
+      .num-cell { padding: 1.6rem 1.4rem; }
+      .contact-form { padding: 1.8rem 1.4rem; border-radius: 16px; }
+      .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: 0.4rem; }
     }
   </style>
 </head>
 <body>
 
-<!-- ─── NAVBAR ─── -->
 <nav id="nav">
   <a href="#hero" class="nl">
     <div class="nl-drop">
@@ -860,7 +893,6 @@
   </a>
 </nav>
 
-<!-- ─── HERO ─── -->
 <section id="hero">
   <div class="hero-left">
     <div class="hero-eyebrow">
@@ -909,10 +941,8 @@
   </div>
 </section>
 
-<!-- ─── MARQUEE ─── -->
 <div class="marquee-wrap">
   <div class="marquee-track">
-    <!-- first set -->
     <div class="marquee-item"><div class="marquee-dot"></div>Borehole Drilling</div>
     <div class="marquee-item"><div class="marquee-dot"></div>Pump Installation</div>
     <div class="marquee-item"><div class="marquee-dot"></div>Water Quality Testing</div>
@@ -921,7 +951,6 @@
     <div class="marquee-item"><div class="marquee-dot"></div>Solar Pumping Systems</div>
     <div class="marquee-item"><div class="marquee-dot"></div>Limpopo · South Africa</div>
     <div class="marquee-item"><div class="marquee-dot"></div>082 553 2591</div>
-    <!-- duplicate for seamless loop -->
     <div class="marquee-item"><div class="marquee-dot"></div>Borehole Drilling</div>
     <div class="marquee-item"><div class="marquee-dot"></div>Pump Installation</div>
     <div class="marquee-item"><div class="marquee-dot"></div>Water Quality Testing</div>
@@ -933,7 +962,6 @@
   </div>
 </div>
 
-<!-- ─── INTRO ─── -->
 <section id="intro">
   <div class="intro-body sr">
     <span class="tag">Who We Are</span>
@@ -983,7 +1011,6 @@
   </div>
 </section>
 
-<!-- ─── SERVICES ─── -->
 <section id="services">
   <div class="services-head sr">
     <div>
@@ -1066,7 +1093,6 @@
   </div>
 </section>
 
-<!-- ─── PROCESS ─── -->
 <section id="process">
   <div class="process-head sr">
     <span class="tag">How We Work</span>
@@ -1098,7 +1124,6 @@
   </div>
 </section>
 
-<!-- ─── FEATURE BAND ─── -->
 <section id="band">
   <div class="band-image sr">
     <img src="https://i.postimg.cc/PqPcWD0c/drilling.png" alt="Drilling operations in Limpopo"/>
@@ -1123,7 +1148,6 @@
   </div>
 </section>
 
-<!-- ─── REVIEWS ─── -->
 <section id="reviews">
   <div class="reviews-head sr">
     <span class="tag">What Clients Say</span>
@@ -1175,7 +1199,6 @@
   </div>
 </section>
 
-<!-- ─── CONTACT ─── -->
 <section id="contact">
   <div class="contact-grid">
     <div class="contact-left sr">
@@ -1260,7 +1283,6 @@
   </div>
 </section>
 
-<!-- ─── FOOTER ─── -->
 <footer>
   <div class="footer-top">
     <div class="footer-brand">
