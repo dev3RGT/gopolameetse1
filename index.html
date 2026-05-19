@@ -548,15 +548,12 @@
     .process-head { text-align: center; max-width: 540px; margin: 0 auto 4rem; }
 
     .process-steps {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 0;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 3rem 1.5rem;
       position: relative;
     }
     .process-steps::before {
-      content: '';
-      position: absolute; top: 36px; left: 12.5%; right: 12.5%;
-      height: 1px;
-      background: linear-gradient(90deg, var(--sea-pale), var(--sea), var(--sea-pale));
+      display: none;
     }
 
     .step {
@@ -721,6 +718,7 @@
       border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
     }
+    .cd-icon svg { width: 18px; height: 18px; }
     .cd-icon svg { width: 18px; height: 18px; }
     .cd-label {
       font-size: 0.7rem; font-weight: 600;
@@ -1068,66 +1066,32 @@
           <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
         </svg>
       </div>
-      <h3>Borehole Drilling</h3>
-      <p>Percussion and rotary drilling for residential, commercial, and agricultural applications across all geological formations in Limpopo.</p>
+      <h3>Tanks</h3>
+      <p>Premium, high-capacity water storage tanks designed to ensure a continuous and highly secure underground water supply.</p>
     </div>
 
-    <div class="svc sr d2">
+    <div class="svc featured sr d2">
       <div class="svc-num">02</div>
-      <div class="svc-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#0077b6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-          <circle cx="12" cy="9" r="2.5"/>
-        </svg>
-      </div>
-      <h3>Geological Site Assessment</h3>
-      <p>Detailed hydrogeological surveys to identify optimal drilling positions, maximising the probability of a high-yield water strike.</p>
-    </div>
-
-    <div class="svc featured sr d3">
-      <div class="svc-num">03</div>
       <div class="svc-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="#48cae4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="11" width="18" height="10" rx="2"/>
           <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
         </svg>
       </div>
-      <h3>Pump Installation</h3>
-      <p>Supply and commissioning of submersible pumps, surface pumps, and solar-powered systems — matched precisely to your borehole yield.</p>
-    </div>
-
-    <div class="svc sr d1">
-      <div class="svc-num">04</div>
-      <div class="svc-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#0077b6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-      </div>
-      <h3>Water Quality Testing</h3>
-      <p>Full laboratory-grade analysis confirming your water is safe for drinking, livestock, and irrigation — with a written compliance report.</p>
-    </div>
-
-    <div class="svc sr d2">
-      <div class="svc-num">05</div>
-      <div class="svc-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#0077b6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <polyline points="12 6 12 12 16 14"/>
-        </svg>
-      </div>
-      <h3>Maintenance & Repairs</h3>
-      <p>Scheduled servicing and rapid-response repairs for existing boreholes and pumping systems, minimising your downtime.</p>
+      <h3>Pumps Stands</h3>
+      <p>Supply and commissioning of reliable submersible and solar-powered pump setups mounted on robust, stable stands.</p>
     </div>
 
     <div class="svc sr d3">
-      <div class="svc-num">06</div>
+      <div class="svc-num">03</div>
       <div class="svc-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="#0077b6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+          <circle cx="12" cy="9" r="2.5"/>
         </svg>
       </div>
-      <h3>Casing & Borehole Lining</h3>
-      <p>Professional PVC casing, sealing, and grouting services to protect your investment and ensure long-term water safety.</p>
+      <h3>Boreholes</h3>
+      <p>End-to-end professional drilling solutions for continuous and dependable access to clean, underground water networks.</p>
     </div>
   </div>
 </section>
@@ -1135,30 +1099,40 @@
 <section id="process">
   <div class="process-head sr">
     <span class="tag">How We Work</span>
-    <h2 class="display">Simple. Proven.<br><em>Four Steps</em> to Water.</h2>
+    <h2 class="display">Simple. Proven.<br><em>Six Steps</em> to Water.</h2>
     <p class="lead" style="margin-top:0.8rem;">We've refined our process over 15 years to make it as smooth as possible for you.</p>
   </div>
 
   <div class="process-steps">
     <div class="step sr d1">
       <div class="step-circle"><span class="step-num">1</span></div>
-      <h4>Consultation</h4>
-      <p>We discuss your water needs, site location, and budget. Free of charge, no obligation.</p>
+      <h4>Free Water Surveying</h4>
+      <p>We analyze your site and complete a hydrogeological survey to identify the highest-yielding drilling point.</p>
     </div>
     <div class="step sr d2">
       <div class="step-circle"><span class="step-num">2</span></div>
-      <h4>Site Assessment</h4>
-      <p>Our team visits and performs a hydrogeological survey to find the best drilling point.</p>
+      <h4>Water Drilling</h4>
+      <p>Our expert team utilizes advanced percussion and rotary equipment to drill safely down to the water source.</p>
     </div>
     <div class="step sr d3">
       <div class="step-circle"><span class="step-num">3</span></div>
-      <h4>Drilling & Casing</h4>
-      <p>We drill, case, and develop your borehole using the right rig for your formation type.</p>
+      <h4>PVC Casing</h4>
+      <p>We reinforce the borehole with long-lasting PVC casing to secure the structure and maintain water purity.</p>
     </div>
     <div class="step sr d4">
       <div class="step-circle"><span class="step-num">4</span></div>
-      <h4>Pump & Handover</h4>
-      <p>Pump is installed, water is tested, and you receive a full handover report and warranty.</p>
+      <h4>Electric Pump</h4>
+      <p>A premium submersible electric pump is fitted, calculated specifically to match the unique flow rate of your well.</p>
+    </div>
+    <div class="step sr d1">
+      <div class="step-circle"><span class="step-num">5</span></div>
+      <h4>Security Box</h4>
+      <p>We install a rugged, locked security control box to safely enclose and protect all underlying electrical systems.</p>
+    </div>
+    <div class="step sr d2">
+      <div class="step-circle"><span class="step-num">6</span></div>
+      <h4>Tank & Stand</h4>
+      <p>A resilient storage tank is mounted onto an engineered structural steel stand for smooth, gravity-fed water delivery.</p>
     </div>
   </div>
 </section>
