@@ -1,635 +1,1137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vynix Bet | Royal Blue Edition</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gopola Meetse — Water Drilling Specialists</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
-                    colors: {
-                        royal: {
-                            50: '#f0f4ff',
-                            100: '#d9e2ff',
-                            500: '#4169E1',
-                            600: '#3252cc',
-                            700: '#27408B',
-                            900: '#1a2a5e',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <style>
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        @keyframes slideIn {
-            from { transform: translateY(10px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .animate-match { animation: slideIn 0.3s ease-out forwards; }
+    :root {
+      --sky:       #e8f4f8;
+      --sky-mid:   #cce8f4;
+      --water:     #1a6e8e;
+      --water-dark:#0d4a63;
+      --water-deep:#06303f;
+      --sand:      #f5efe6;
+      --sand-mid:  #e8d9c5;
+      --text:      #1a2a32;
+      --muted:     #5a7a8a;
+      --white:     #ffffff;
+      --accent:    #2ab8d8;
+    }
 
-        @keyframes toastIn {
-            0% { transform: translate(-50%, 100%); }
-            100% { transform: translate(-50%, -20px); }
-        }
-        .bet-success-toast {
-            animation: toastIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
+    html { scroll-behavior: smooth; }
 
-        .league-scroll { -webkit-overflow-scrolling: touch; }
-        .tab-view { display: none; animation: slideIn 0.3s ease-out forwards; }
-        .tab-view.active { display: block; }
-    </style>
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.6rem 5%;
+      background: transparent;
+      transition: background 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
+    }
+    nav.scrolled {
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 1rem 5%;
+      box-shadow: 0 2px 32px rgba(6,48,63,0.10);
+    }
+
+    /* Logo */
+    .nav-logo {
+      display: flex; align-items: center; gap: 0.55rem;
+      text-decoration: none; flex-shrink: 0;
+    }
+    .nav-logo-mark {
+      position: relative;
+      width: 36px; height: 36px; flex-shrink: 0;
+    }
+    .nav-logo-mark svg {
+      width: 36px; height: 36px; display: block;
+      transition: transform 0.3s ease;
+    }
+    .nav-logo:hover .nav-logo-mark svg { transform: translateY(-2px); }
+    .nav-logo-text {
+      display: flex; flex-direction: column; line-height: 1.1;
+    }
+    .nav-logo-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: white;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      transition: color 0.4s;
+    }
+    .nav-logo-name span { color: var(--accent); }
+    .nav-logo-sub {
+      font-size: 0.62rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      transition: color 0.4s;
+    }
+    nav.scrolled .nav-logo-name { color: var(--water-dark); }
+    nav.scrolled .nav-logo-name span { color: var(--accent); }
+    nav.scrolled .nav-logo-sub { color: var(--muted); }
+
+    /* Links */
+    .nav-links {
+      display: flex; align-items: center; gap: 0;
+      list-style: none;
+      position: absolute; left: 50%; transform: translateX(-50%);
+    }
+    .nav-links li { display: list-item; }
+    .nav-links a {
+      display: inline-block;
+      text-decoration: none;
+      color: rgba(255,255,255,0.82);
+      font-size: 0.875rem; font-weight: 500;
+      padding: 0.4rem 1.1rem;
+      border-radius: 50px;
+      transition: color 0.25s, background 0.25s;
+      position: relative;
+      white-space: nowrap;
+    }
+    .nav-links a:hover {
+      color: white;
+      background: rgba(255,255,255,0.1);
+    }
+    nav.scrolled .nav-links a { color: var(--muted); }
+    nav.scrolled .nav-links a:hover {
+      color: var(--water);
+      background: var(--sky);
+    }
+
+    /* CTA button */
+    .btn-nav {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.6rem 1.4rem;
+      background: transparent;
+      color: white !important;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500; font-size: 0.875rem;
+      border: 1.5px solid rgba(255,255,255,0.55);
+      border-radius: 50px; cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap; flex-shrink: 0;
+      transition: background 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s, transform 0.25s;
+    }
+    .btn-nav svg { width: 15px; height: 15px; fill: white; transition: fill 0.25s; flex-shrink: 0; }
+    .btn-nav:hover {
+      background: white;
+      border-color: white;
+      color: var(--water) !important;
+      box-shadow: 0 4px 20px rgba(255,255,255,0.25);
+      transform: translateY(-1px);
+    }
+    .btn-nav:hover svg { fill: var(--water); }
+    nav.scrolled .btn-nav {
+      background: var(--water);
+      border-color: var(--water);
+      color: white !important;
+      box-shadow: 0 2px 14px rgba(26,110,142,0.28);
+    }
+    nav.scrolled .btn-nav svg { fill: white; }
+    nav.scrolled .btn-nav:hover {
+      background: var(--water-dark);
+      border-color: var(--water-dark);
+      box-shadow: 0 4px 20px rgba(26,110,142,0.38);
+    }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background-image: url('https://i.postimg.cc/PqPcWD0c/drilling.png');
+      background-size: cover;
+      background-position: center 30%;
+      transform-origin: center;
+      animation: heroZoom 18s ease-in-out infinite alternate;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(6,48,63,0.68) 0%,
+        rgba(13,74,99,0.45) 50%,
+        rgba(42,184,216,0.15) 100%
+      );
+    }
+
+    @keyframes heroZoom {
+      from { transform: scale(1); }
+      to   { transform: scale(1.07); }
+    }
+
+    /* Animated water ripple overlay */
+    .ripple-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .ripple-overlay::before, .ripple-overlay::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(42,184,216,0.2);
+      animation: rippleGrow 6s ease-out infinite;
+    }
+    .ripple-overlay::before {
+      width: 300px; height: 300px;
+      bottom: 10%; right: 8%;
+      animation-delay: 0s;
+    }
+    .ripple-overlay::after {
+      width: 500px; height: 500px;
+      bottom: 5%; right: 3%;
+      animation-delay: 1.5s;
+    }
+    @keyframes rippleGrow {
+      0%   { transform: scale(0.5); opacity: 0.6; }
+      100% { transform: scale(2); opacity: 0; }
+    }
+
+    /* Floating water drops */
+    .drops-container {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
+    }
+    .drop {
+      position: absolute;
+      width: 6px; height: 9px;
+      background: rgba(42,184,216,0.55);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation: floatDrop linear infinite;
+    }
+    .drop:nth-child(1)  { left: 12%; animation-duration: 9s;  animation-delay: 0s;   opacity: 0.6; }
+    .drop:nth-child(2)  { left: 27%; animation-duration: 11s; animation-delay: 2s;   opacity: 0.4; width: 4px; height: 6px; }
+    .drop:nth-child(3)  { left: 45%; animation-duration: 8s;  animation-delay: 4s;   opacity: 0.5; }
+    .drop:nth-child(4)  { left: 62%; animation-duration: 12s; animation-delay: 1s;   opacity: 0.35; width: 5px; height: 7px; }
+    .drop:nth-child(5)  { left: 78%; animation-duration: 10s; animation-delay: 3s;   opacity: 0.5; }
+    .drop:nth-child(6)  { left: 88%; animation-duration: 7s;  animation-delay: 5s;   opacity: 0.45; width: 4px; height: 6px; }
+
+    @keyframes floatDrop {
+      0%   { transform: translateY(110vh) translateX(0);   opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.4; }
+      100% { transform: translateY(-20vh) translateX(30px); opacity: 0; }
+    }
+
+    /* Scan-line shimmer */
+    .scan-line {
+      position: absolute; left: 0; right: 0; z-index: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(42,184,216,0.4), transparent);
+      animation: scanMove 5s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes scanMove {
+      0%   { top: 0%; opacity: 0; }
+      5%   { opacity: 1; }
+      95%  { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 680px;
+      margin-left: 8%;
+      padding: 0 2rem;
+      animation: heroFadeUp 1.1s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes heroFadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(42,184,216,0.18);
+      border: 1px solid rgba(42,184,216,0.4);
+      color: #a8e8f4;
+      font-size: 0.78rem; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 1rem;
+      border-radius: 50px;
+      margin-bottom: 1.6rem;
+      animation: heroFadeUp 1.1s 0.15s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .hero-badge::before {
+      content: '';
+      display: inline-block; width: 6px; height: 6px;
+      background: var(--accent); border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.5; transform: scale(1.4); }
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+      font-weight: 700;
+      color: white;
+      line-height: 1.13;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.3rem;
+      animation: heroFadeUp 1.1s 0.25s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem; color: rgba(255,255,255,0.72);
+      font-weight: 300; line-height: 1.7;
+      max-width: 420px;
+      margin-bottom: 2.4rem;
+      animation: heroFadeUp 1.1s 0.35s cubic-bezier(0.22,1,0.36,1) both;
+    }
+
+    .hero-btns {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      animation: heroFadeUp 1.1s 0.45s cubic-bezier(0.22,1,0.36,1) both;
+    }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.85rem 2rem;
+      background: var(--accent);
+      color: white; font-family: 'DM Sans', sans-serif;
+      font-weight: 500; font-size: 0.95rem;
+      border: none; border-radius: 50px; cursor: pointer;
+      text-decoration: none;
+      transition: background 0.22s, transform 0.22s, box-shadow 0.22s;
+      box-shadow: 0 4px 24px rgba(42,184,216,0.4);
+    }
+    .btn-primary:hover {
+      background: #1da8c8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(42,184,216,0.5);
+    }
+    .btn-primary svg { width: 18px; height: 18px; fill: white; }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.85rem 2rem;
+      background: transparent;
+      color: white; font-family: 'DM Sans', sans-serif;
+      font-weight: 500; font-size: 0.95rem;
+      border: 1.5px solid rgba(255,255,255,0.45); border-radius: 50px;
+      cursor: pointer; text-decoration: none;
+      transition: border-color 0.22s, background 0.22s, transform 0.22s;
+      backdrop-filter: blur(8px);
+    }
+    .btn-ghost:hover {
+      border-color: white;
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+
+    /* Stats strip on hero */
+    .hero-stats {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+      display: flex; justify-content: center; gap: 0;
+      animation: heroFadeUp 1.1s 0.55s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .stat-pill {
+      flex: 1; max-width: 220px;
+      text-align: center;
+      padding: 1.5rem 1.2rem;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid rgba(26,110,142,0.1);
+      transition: background 0.2s;
+    }
+    .stat-pill:last-child { border-right: none; }
+    .stat-pill:hover { background: white; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem; font-weight: 700;
+      color: var(--water); display: block;
+    }
+    .stat-lbl {
+      font-size: 0.78rem; color: var(--muted);
+      font-weight: 500; letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ── SCROLL INDICATOR ── */
+    .scroll-hint {
+      position: absolute; bottom: 110px; right: 5%;
+      z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      color: rgba(255,255,255,0.5); font-size: 0.72rem; letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: heroFadeUp 1.1s 0.7s both;
+    }
+    .scroll-arrow {
+      width: 24px; height: 38px;
+      border: 1.5px solid rgba(255,255,255,0.35);
+      border-radius: 12px;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 5px;
+    }
+    .scroll-dot {
+      width: 4px; height: 8px;
+      background: var(--accent); border-radius: 2px;
+      animation: scrollBounce 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollBounce {
+      0%,100% { transform: translateY(0); opacity: 1; }
+      50%      { transform: translateY(14px); opacity: 0.3; }
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      padding: 7rem 5%;
+      background: var(--white);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+      align-items: center;
+    }
+    .about-visual {
+      position: relative;
+    }
+    .about-img-wrap {
+      border-radius: 24px; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(6,48,63,0.15);
+      aspect-ratio: 4/5;
+    }
+    .about-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .about-img-wrap:hover img { transform: scale(1.04); }
+    .about-badge-float {
+      position: absolute; bottom: -1.5rem; right: -1.5rem;
+      background: var(--water);
+      color: white; border-radius: 20px;
+      padding: 1.4rem 1.8rem;
+      box-shadow: 0 8px 32px rgba(26,110,142,0.35);
+      text-align: center;
+    }
+    .about-badge-float strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 700;
+    }
+    .about-badge-float span { font-size: 0.78rem; opacity: 0.8; }
+
+    .about-text { max-width: 520px; }
+    .section-tag {
+      display: inline-block;
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 700; line-height: 1.2;
+      color: var(--water-deep);
+      margin-bottom: 1.2rem;
+    }
+    .section-body {
+      font-size: 1rem; color: var(--muted);
+      line-height: 1.8; margin-bottom: 1.6rem;
+    }
+
+    .about-list { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 2rem; }
+    .about-list li {
+      display: flex; align-items: center; gap: 0.7rem;
+      font-size: 0.92rem; color: var(--text);
+    }
+    .about-list li::before {
+      content: '';
+      flex-shrink: 0;
+      width: 18px; height: 18px;
+      background: rgba(42,184,216,0.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232ab8d8'%3E%3Cpath d='M9 12l2 2 4-4'/%3E%3C/svg%3E");
+      background-size: cover;
+    }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.8rem 1.8rem;
+      border: 1.5px solid var(--water);
+      color: var(--water);
+      font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 0.92rem;
+      border-radius: 50px; text-decoration: none;
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+    }
+    .btn-outline:hover {
+      background: var(--water); color: white;
+      transform: translateY(-2px);
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      padding: 7rem 5%;
+      background: var(--sky);
+    }
+    .section-header {
+      text-align: center; max-width: 520px; margin: 0 auto 4rem;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1.5rem;
+    }
+    .service-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.2rem 1.8rem;
+      border: 1px solid rgba(26,110,142,0.07);
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--water), var(--accent));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.35s;
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(26,110,142,0.12);
+      border-color: rgba(42,184,216,0.2);
+    }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: var(--sky);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.2rem;
+      transition: background 0.3s;
+    }
+    .service-card:hover .service-icon { background: rgba(42,184,216,0.12); }
+    .service-icon svg { width: 26px; height: 26px; }
+    .service-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; font-weight: 600;
+      color: var(--water-deep);
+      margin-bottom: 0.6rem;
+    }
+    .service-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── WHY US ── */
+    #why {
+      padding: 7rem 5%;
+      background: var(--water-deep);
+      color: white;
+    }
+    #why .section-title { color: white; }
+    #why .section-tag { color: var(--accent); }
+    #why .section-body { color: rgba(255,255,255,0.6); }
+
+    .why-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    }
+    .why-items { display: flex; flex-direction: column; gap: 1.6rem; }
+    .why-item {
+      display: flex; gap: 1.2rem;
+      padding: 1.4rem;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.04);
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .why-item:hover {
+      background: rgba(42,184,216,0.08);
+      border-color: rgba(42,184,216,0.25);
+    }
+    .why-num {
+      flex-shrink: 0;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(42,184,216,0.12);
+      border: 1px solid rgba(42,184,216,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--accent);
+    }
+    .why-item-title {
+      font-weight: 600; font-size: 0.95rem;
+      margin-bottom: 0.3rem; color: white;
+    }
+    .why-item-text { font-size: 0.85rem; color: rgba(255,255,255,0.55); line-height: 1.65; }
+
+    .why-visual {
+      position: relative;
+    }
+    .why-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(42,184,216,0.2);
+      border-radius: 24px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+    }
+    .rating-big {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem; font-weight: 700;
+      color: var(--accent); line-height: 1;
+    }
+    .stars {
+      display: flex; justify-content: center; gap: 4px;
+      margin: 0.8rem 0;
+    }
+    .stars span { font-size: 1.5rem; color: #f5c518; }
+    .review-count { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-bottom: 2rem; }
+    .review-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1.5rem 0; }
+
+    .review-quote {
+      font-size: 0.9rem; color: rgba(255,255,255,0.7);
+      line-height: 1.7; font-style: italic;
+      margin-bottom: 1rem;
+    }
+    .reviewer { font-size: 0.8rem; color: var(--accent); font-weight: 500; }
+
+    /* ── CONTACT ── */
+    #contact {
+      padding: 7rem 5%;
+      background: var(--sand);
+    }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: start;
+    }
+    .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+    .contact-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+    }
+    .contact-icon {
+      flex-shrink: 0; width: 44px; height: 44px;
+      background: var(--sky-mid); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .contact-icon svg { width: 20px; height: 20px; }
+    .contact-label {
+      font-size: 0.75rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--muted);
+      font-weight: 600; margin-bottom: 0.2rem;
+    }
+    .contact-val {
+      font-size: 0.92rem; color: var(--text); font-weight: 500;
+    }
+    .contact-val a { color: var(--water); text-decoration: none; }
+    .contact-val a:hover { text-decoration: underline; }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1.1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-field label { font-size: 0.82rem; font-weight: 500; color: var(--muted); }
+    .form-field input, .form-field textarea, .form-field select {
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--sand-mid);
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem; color: var(--text);
+      background: white;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .form-field input:focus, .form-field textarea:focus, .form-field select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(42,184,216,0.12);
+    }
+    .form-field textarea { resize: vertical; min-height: 110px; }
+    .btn-submit {
+      align-self: flex-start;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.9rem 2.2rem;
+      background: var(--water);
+      color: white; font-family: 'DM Sans', sans-serif;
+      font-weight: 500; font-size: 0.95rem;
+      border: none; border-radius: 50px; cursor: pointer;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 18px rgba(26,110,142,0.25);
+    }
+    .btn-submit:hover {
+      background: var(--water-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(26,110,142,0.35);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--water-deep);
+      color: rgba(255,255,255,0.55);
+      padding: 3rem 5% 2rem;
+      display: flex;
+      flex-direction: column; gap: 1.5rem;
+    }
+    .footer-top {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; color: white; font-weight: 700;
+    }
+    .footer-logo span { color: var(--accent); }
+    .footer-nav { display: flex; gap: 1.8rem; flex-wrap: wrap; }
+    .footer-nav a {
+      color: rgba(255,255,255,0.5); text-decoration: none;
+      font-size: 0.85rem; transition: color 0.2s;
+    }
+    .footer-nav a:hover { color: var(--accent); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding-top: 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 0.5rem;
+    }
+    .footer-copy { font-size: 0.8rem; }
+
+    /* ── FADE-IN ON SCROLL ── */
+    .fade-in {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: none; }
+    .fade-in.delay-1 { transition-delay: 0.1s; }
+    .fade-in.delay-2 { transition-delay: 0.2s; }
+    .fade-in.delay-3 { transition-delay: 0.3s; }
+    .fade-in.delay-4 { transition-delay: 0.4s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      #about { grid-template-columns: 1fr; gap: 3rem; }
+      .about-text { max-width: 100%; }
+      .why-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-stats { position: relative; flex-wrap: wrap; }
+      .stat-pill { max-width: none; flex-basis: 50%; }
+    }
+    @media (max-width: 620px) {
+      .hero-content { margin-left: 0; padding: 0 1.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-stats { display: grid; grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+    }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans pb-24 overflow-x-hidden">
+<body>
 
-    <div id="success-toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-[100] bg-emerald-600 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 opacity-0 pointer-events-none transition-opacity duration-300">
-        <i class="fa-solid fa-circle-check"></i>
-        <span class="font-bold" id="toast-msg">Success!</span>
+<!-- ── NAV ── -->
+<nav id="mainNav">
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="18" fill="rgba(42,184,216,0.18)"/>
+        <path fill="#2ab8d8" d="M18 6C13.58 6 10 9.58 10 14c0 6.56 8 16 8 16s8-9.44 8-16c0-4.42-3.58-8-8-8zm0 11c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
+      </svg>
+    </div>
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Gopola <span>Meetse</span></span>
+      <span class="nav-logo-sub">Water Drilling</span>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+
+  <a href="tel:0825532591" class="btn-nav">
+    <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02z"/></svg>
+    Call Us
+  </a>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="ripple-overlay"></div>
+  <div class="drops-container">
+    <div class="drop"></div>
+    <div class="drop"></div>
+    <div class="drop"></div>
+    <div class="drop"></div>
+    <div class="drop"></div>
+    <div class="drop"></div>
+  </div>
+  <div class="scan-line"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">Mokopane · Limpopo · South Africa</div>
+    <h1 class="hero-title">
+      Where Earth<br>Meets <em>Water</em>
+    </h1>
+    <p class="hero-sub">Professional borehole drilling and water solutions for residential, agricultural, and industrial needs.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        Get a Free Quote
+      </a>
+      <a href="#services" class="btn-ghost">
+        Our Services
+      </a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-arrow"><div class="scroll-dot"></div></div>
+    Scroll
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-pill">
+      <span class="stat-num">15+</span>
+      <span class="stat-lbl">Years Experience</span>
+    </div>
+    <div class="stat-pill">
+      <span class="stat-num">500+</span>
+      <span class="stat-lbl">Boreholes Drilled</span>
+    </div>
+    <div class="stat-pill">
+      <span class="stat-num">3.9★</span>
+      <span class="stat-lbl">Google Rating</span>
+    </div>
+    <div class="stat-pill">
+      <span class="stat-num">24/7</span>
+      <span class="stat-lbl">Emergency Support</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="about-visual fade-in">
+    <div class="about-img-wrap">
+      <img src="https://i.postimg.cc/PqPcWD0c/drilling.png" alt="Gopola Meetse drilling operations">
+    </div>
+    <div class="about-badge-float">
+      <strong>9</strong>
+      <span>Google Reviews</span>
+    </div>
+  </div>
+  <div class="about-text">
+    <span class="section-tag fade-in">Who We Are</span>
+    <h2 class="section-title fade-in delay-1">Your Trusted Water<br>Drilling Partner</h2>
+    <p class="section-body fade-in delay-2">
+      Gopola Meetse is a leading borehole drilling contractor based in Mokopane, Limpopo. We combine local expertise with modern drilling technology to deliver reliable water solutions across Southern Africa.
+    </p>
+    <ul class="about-list fade-in delay-3">
+      <li>Licensed and certified drilling professionals</li>
+      <li>Modern percussion and rotary drilling rigs</li>
+      <li>Full geological assessment before drilling</li>
+      <li>Pump installation and maintenance services</li>
+      <li>Water quality testing and compliance</li>
+    </ul>
+    <a href="#contact" class="btn-outline fade-in delay-4">
+      Learn More
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section id="services">
+  <div class="section-header fade-in">
+    <span class="section-tag">What We Do</span>
+    <h2 class="section-title">Complete Water<br>Drilling Solutions</h2>
+    <p class="section-body">From initial site assessment to final pump installation — we handle every step of your water project.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card fade-in delay-1">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a6e8e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L12 22M5 5l14 14M19 5L5 19"/>
+          <circle cx="12" cy="12" r="4"/>
+        </svg>
+      </div>
+      <h3 class="service-name">Borehole Drilling</h3>
+      <p class="service-desc">High-precision percussion and rotary borehole drilling for residential, commercial, and agricultural applications.</p>
+    </div>
+    <div class="service-card fade-in delay-2">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a6e8e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/>
+          <circle cx="12" cy="9" r="2.5"/>
+        </svg>
+      </div>
+      <h3 class="service-name">Site Assessment</h3>
+      <p class="service-desc">Thorough geological surveys and hydrogeological studies to identify the best drilling sites before we break ground.</p>
+    </div>
+    <div class="service-card fade-in delay-3">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a6e8e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="10" rx="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <h3 class="service-name">Pump Installation</h3>
+      <p class="service-desc">Supply and installation of submersible pumps, surface pumps, and solar-powered pumping systems tailored to your yield.</p>
+    </div>
+    <div class="service-card fade-in delay-1">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a6e8e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </div>
+      <h3 class="service-name">Water Quality Testing</h3>
+      <p class="service-desc">Comprehensive water analysis and testing services to ensure your borehole water is safe for drinking and irrigation use.</p>
+    </div>
+    <div class="service-card fade-in delay-2">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a6e8e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+      <h3 class="service-name">Maintenance & Repairs</h3>
+      <p class="service-desc">Scheduled maintenance, emergency repairs, and rehabilitation of existing boreholes and pump systems.</p>
+    </div>
+    <div class="service-card fade-in delay-3">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a6e8e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <h3 class="service-name">Borehole Casing & Lining</h3>
+      <p class="service-desc">Professional casing, sealing, and lining services to protect your borehole and ensure long-term water safety.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHY US ── -->
+<section id="why">
+  <div class="why-grid">
+    <div>
+      <span class="section-tag fade-in">Why Choose Us</span>
+      <h2 class="section-title fade-in delay-1">Trusted by Hundreds<br>Across Limpopo</h2>
+      <p class="section-body fade-in delay-2">We bring deep local knowledge, advanced equipment, and genuine commitment to every project we undertake.</p>
+      <div class="why-items">
+        <div class="why-item fade-in delay-1">
+          <div class="why-num">01</div>
+          <div>
+            <div class="why-item-title">Local Expertise</div>
+            <p class="why-item-text">We know the geology of Mokopane and surrounding areas intimately, improving drilling success rates significantly.</p>
+          </div>
+        </div>
+        <div class="why-item fade-in delay-2">
+          <div class="why-num">02</div>
+          <div>
+            <div class="why-item-title">Modern Equipment</div>
+            <p class="why-item-text">Our fleet of percussion and rotary rigs handles any formation — from soft alluvial soils to hard granite bedrock.</p>
+          </div>
+        </div>
+        <div class="why-item fade-in delay-3">
+          <div class="why-num">03</div>
+          <div>
+            <div class="why-item-title">Transparent Pricing</div>
+            <p class="why-item-text">Detailed written quotations with no hidden costs. You know exactly what you're paying for before we start.</p>
+          </div>
+        </div>
+        <div class="why-item fade-in delay-4">
+          <div class="why-num">04</div>
+          <div>
+            <div class="why-item-title">End-to-End Service</div>
+            <p class="why-item-text">From site survey to pump commissioning and aftercare — one contractor, zero handover headaches.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="why-visual fade-in delay-2">
+      <div class="why-card">
+        <div class="rating-big">3.9</div>
+        <div class="stars">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span style="opacity:0.4">★</span>
+        </div>
+        <p class="review-count">Based on 9 Google Reviews</p>
+        <hr class="review-divider">
+        <p class="review-quote">"Excellent service! They drilled our borehole quickly and professionally. The team was knowledgeable and kept us informed throughout the process."</p>
+        <p class="reviewer">— Google Reviewer, Mokopane</p>
+        <hr class="review-divider">
+        <p class="review-quote">"Very reliable company. They showed up on time and the borehole has been producing great water. Highly recommend Gopola Meetse!"</p>
+        <p class="reviewer">— Google Reviewer, Limpopo</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="section-header fade-in">
+    <span class="section-tag">Get In Touch</span>
+    <h2 class="section-title">Ready to Find<br>Your Water?</h2>
+    <p class="section-body">Reach out for a free consultation and site assessment quote.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info fade-in">
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="#1a6e8e"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Address</div>
+          <div class="contact-val">Retief St, Mokopane, Polokwane, 0600</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="#1a6e8e"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Phone</div>
+          <div class="contact-val">
+            <a href="tel:0825532591">082 553 2591</a> /
+            <a href="tel:0829650044">082 965 0044</a>
+          </div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="#1a6e8e"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Hours</div>
+          <div class="contact-val">Mon – Fri: 08:00 – 16:30</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="#1a6e8e"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Location</div>
+          <div class="contact-val">Serving Limpopo &amp; surrounding provinces</div>
+        </div>
+      </div>
     </div>
 
-    <header class="sticky top-0 z-40 bg-royal-500 shadow-xl px-4 py-3 flex justify-between items-center text-white">
-        <div class="flex items-center gap-2">
-            <div class="bg-white p-1.5 rounded-lg shadow-sm">
-                <i class="fa-solid fa-trophy text-royal-500 text-lg"></i>
-            </div>
-            <div>
-                <h1 class="text-lg font-extrabold leading-none tracking-tight">VYNIX<span class="text-royal-100">PRO</span></h1>
-                <p class="text-[9px] uppercase tracking-[0.2em] opacity-80">Elite Sportsbook</p>
-            </div>
+    <form class="contact-form fade-in delay-2" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Full Name</label>
+          <input type="text" placeholder="John Mokoena" required>
         </div>
-        <div class="flex items-center gap-3">
-            <div onclick="toggleDepositModal()" class="bg-royal-700 px-3 py-1.5 rounded-xl border border-royal-100/20 text-right cursor-pointer hover:bg-royal-600 active:scale-95 transition-all">
-                <p class="text-[9px] text-emerald-400 uppercase font-bold flex items-center justify-end gap-1"><i class="fa-solid fa-plus"></i> Load Funds</p>
-                <p class="font-black text-sm user-balance-display">R 1,250.00</p>
-            </div>
-            <button class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 active:scale-90 transition">
-                <i class="fa-solid fa-bell"></i>
-            </button>
+        <div class="form-field">
+          <label>Phone Number</label>
+          <input type="tel" placeholder="082 000 0000" required>
         </div>
-    </header>
+      </div>
+      <div class="form-field">
+        <label>Email Address</label>
+        <input type="email" placeholder="you@example.com">
+      </div>
+      <div class="form-field">
+        <label>Service Required</label>
+        <select>
+          <option value="">Select a service…</option>
+          <option>Borehole Drilling</option>
+          <option>Site Assessment</option>
+          <option>Pump Installation</option>
+          <option>Water Quality Testing</option>
+          <option>Maintenance & Repairs</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Message</label>
+        <textarea placeholder="Tell us about your water needs and location…"></textarea>
+      </div>
+      <button type="submit" class="btn-submit">
+        Send Message
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </form>
+  </div>
+</section>
 
-    <div id="deposit-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[90] opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
-        <div class="bg-white rounded-[2rem] p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-transform duration-300" id="deposit-card">
-            <div class="flex justify-between items-center mb-6">
-                <div class="flex items-center gap-2">
-                    <div class="bg-emerald-100 p-2 rounded-xl text-emerald-600">
-                        <i class="fa-solid fa-wallet"></i>
-                    </div>
-                    <h3 class="text-xl font-black text-slate-800">Mock Deposit</h3>
-                </div>
-                <button onclick="toggleDepositModal()" class="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 transition"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <div class="space-y-5">
-                <div class="bg-slate-50 p-4 rounded-2xl border-2 border-slate-100 focus-within:border-emerald-500 transition-colors">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Amount to load (ZAR)</p>
-                    <input type="number" id="deposit-amount" placeholder="e.g. 500" class="w-full bg-transparent font-black text-3xl outline-none text-slate-800 placeholder-slate-300">
-                </div>
-                
-                <div class="flex gap-2">
-                    <button onclick="setDepositAmount(100)" class="flex-1 bg-white text-slate-600 font-bold py-2.5 rounded-xl text-sm border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition-all">+R100</button>
-                    <button onclick="setDepositAmount(500)" class="flex-1 bg-white text-slate-600 font-bold py-2.5 rounded-xl text-sm border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition-all">+R500</button>
-                    <button onclick="setDepositAmount(1000)" class="flex-1 bg-white text-slate-600 font-bold py-2.5 rounded-xl text-sm border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition-all">+R1000</button>
-                </div>
-                
-                <button onclick="processMockDeposit()" class="w-full bg-emerald-500 text-white font-black py-4 rounded-2xl shadow-xl shadow-emerald-500/30 hover:bg-emerald-600 active:scale-95 transition-all uppercase tracking-widest mt-2">
-                    Confirm Deposit
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <main class="max-w-2xl mx-auto">
-        
-        <div id="view-home" class="tab-view active p-4 space-y-5">
-            <div class="relative group">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="text" id="match-search" placeholder="Search teams or basketball leagues..." class="w-full bg-white border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 focus:outline-none focus:ring-4 focus:ring-royal-500/10 focus:border-royal-500 transition shadow-sm">
-            </div>
-
-            <div class="flex gap-3 overflow-x-auto no-scrollbar py-1">
-                <button class="cat-btn flex items-center gap-2 px-6 py-2.5 bg-royal-500 text-white rounded-2xl font-bold shadow-lg shadow-royal-500/30 transition-all whitespace-nowrap">
-                    <i class="fa-solid fa-basketball"></i> Global Hoops
-                </button>
-            </div>
-
-            <div class="relative">
-                <div class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none"></div>
-                <div id="league-filters" class="flex gap-2 overflow-x-auto no-scrollbar league-scroll py-1 pb-2"></div>
-                <div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none"></div>
-            </div>
-
-            <div class="flex justify-between items-center pt-2">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-earth-americas text-royal-500 text-lg"></i>
-                    <h3 class="font-extrabold text-xl text-slate-800" id="feed-title">All Basketball Games</h3>
-                </div>
-                <button onclick="fetchMatches()" class="text-royal-500 font-bold text-sm flex items-center gap-1.5 hover:bg-royal-50 px-3 py-1 rounded-lg transition border border-royal-100">
-                    <i class="fa-solid fa-rotate" id="refresh-icon"></i>
-                </button>
-            </div>
-
-            <div id="matches-feed" class="space-y-4">
-                <div class="bg-white h-48 rounded-3xl animate-pulse border border-slate-100"></div>
-                <div class="bg-white h-48 rounded-3xl animate-pulse border border-slate-100"></div>
-            </div>
-        </div>
-
-        <div id="view-history" class="tab-view p-4 space-y-5">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="bg-royal-100 p-3 rounded-xl text-royal-600">
-                    <i class="fa-solid fa-clock-rotate-left text-xl"></i>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-black text-slate-800">Bet History</h2>
-                    <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Your past slips</p>
-                </div>
-            </div>
-
-            <div id="history-feed" class="space-y-4">
-                <div class="text-center py-12">
-                    <i class="fa-solid fa-receipt text-5xl text-slate-200 mb-3"></i>
-                    <p class="text-slate-400 font-bold">No bets placed yet.</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="view-profile" class="tab-view p-4 space-y-6">
-            <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-200 text-center relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-r from-royal-500 to-royal-700"></div>
-                
-                <div class="relative z-10">
-                    <div class="w-24 h-24 mx-auto bg-slate-100 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-3xl text-royal-500 font-black mb-3 mt-4 overflow-hidden">
-                        KF
-                    </div>
-                    <h2 class="text-2xl font-black text-slate-800">Katlego Frans</h2>
-                    <p class="text-xs font-bold text-royal-500 bg-royal-50 inline-block px-3 py-1 rounded-full border border-royal-100 mt-1">Software Developer</p>
-                    <p class="text-[10px] text-slate-400 uppercase tracking-widest mt-2">User ID: VYN-8849-KF</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
-                <div class="bg-white rounded-[1.5rem] p-4 border border-slate-200 shadow-sm flex flex-col justify-center items-center">
-                    <i class="fa-solid fa-wallet text-emerald-500 text-xl mb-2"></i>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Available Funds</p>
-                    <p class="text-lg font-black text-slate-800 mt-1 user-balance-display">R 1,250.00</p>
-                </div>
-                <div class="bg-white rounded-[1.5rem] p-4 border border-slate-200 shadow-sm flex flex-col justify-center items-center">
-                    <i class="fa-solid fa-ticket text-royal-500 text-xl mb-2"></i>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total Bets</p>
-                    <p class="text-lg font-black text-slate-800 mt-1" id="profile-total-bets">0</p>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-[2rem] border border-slate-200 shadow-sm overflow-hidden">
-                <div class="p-4 border-b border-slate-100 flex items-center justify-between hover:bg-slate-50 cursor-pointer transition">
-                    <div class="flex items-center gap-3">
-                        <div class="bg-slate-100 w-10 h-10 rounded-full flex items-center justify-center text-slate-600"><i class="fa-solid fa-gear"></i></div>
-                        <span class="font-bold text-slate-700">Account Settings</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-slate-300"></i>
-                </div>
-                <div class="p-4 border-b border-slate-100 flex items-center justify-between hover:bg-slate-50 cursor-pointer transition">
-                    <div class="flex items-center gap-3">
-                        <div class="bg-slate-100 w-10 h-10 rounded-full flex items-center justify-center text-slate-600"><i class="fa-solid fa-shield-halved"></i></div>
-                        <span class="font-bold text-slate-700">Security & Privacy</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-slate-300"></i>
-                </div>
-                <div class="p-4 flex items-center justify-between hover:bg-slate-50 cursor-pointer transition">
-                    <div class="flex items-center gap-3">
-                        <div class="bg-red-50 w-10 h-10 rounded-full flex items-center justify-center text-red-500"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
-                        <span class="font-bold text-red-500">Sign Out</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <nav class="fixed bottom-0 w-full bg-white/90 backdrop-blur-xl border-t border-slate-200 h-20 flex justify-around items-center px-4 z-50">
-        <div onclick="switchTab('home')" id="nav-home" class="nav-btn flex flex-col items-center text-royal-500 cursor-pointer transition">
-            <i class="fa-solid fa-house-chimney text-xl"></i>
-            <span class="text-[10px] font-bold mt-1">Home</span>
-        </div>
-        
-        <div class="relative -top-8">
-            <button onclick="toggleSlip()" class="w-16 h-16 bg-royal-500 rounded-3xl shadow-2xl shadow-royal-500/40 flex items-center justify-center text-white border-4 border-slate-50 active:scale-90 transition-transform">
-                <div class="relative">
-                    <i class="fa-solid fa-receipt text-2xl"></i>
-                    <span id="slip-count" class="absolute -top-3 -right-3 bg-red-500 text-white text-[10px] font-black w-6 h-6 flex items-center justify-center rounded-full border-2 border-white hidden">0</span>
-                </div>
-            </button>
-        </div>
-
-        <div onclick="switchTab('history')" id="nav-history" class="nav-btn flex flex-col items-center text-slate-400 hover:text-royal-500 cursor-pointer transition">
-            <i class="fa-solid fa-clock-rotate-left text-xl"></i>
-            <span class="text-[10px] font-bold mt-1">History</span>
-        </div>
-        <div onclick="switchTab('profile')" id="nav-profile" class="nav-btn flex flex-col items-center text-slate-400 hover:text-royal-500 cursor-pointer transition">
-            <i class="fa-solid fa-user-gear text-xl"></i>
-            <span class="text-[10px] font-bold mt-1">Profile</span>
-        </div>
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-logo">Gopola <span>Meetse</span></div>
+    <nav class="footer-nav">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#why">Reviews</a>
+      <a href="#contact">Contact</a>
     </nav>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 Gopola Meetse. All rights reserved. Retief St, Mokopane, 0600.</p>
+    <p class="footer-copy">Crafted with care in Limpopo, South Africa</p>
+  </div>
+</footer>
 
-    <div id="slip-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] opacity-0 pointer-events-none transition-all duration-300" onclick="toggleSlip()"></div>
-    
-    <div id="slip-drawer" class="fixed bottom-0 left-0 w-full bg-white rounded-t-[2.5rem] z-[70] transform translate-y-full transition-transform duration-500 shadow-2xl flex flex-col max-h-[85vh]">
-        <div class="p-6 border-b border-slate-100 flex justify-between items-center">
-            <h2 class="text-2xl font-black text-slate-800">My Bet Slip</h2>
-            <button onclick="toggleSlip()" class="bg-slate-100 w-10 h-10 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark"></i></button>
-        </div>
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  });
 
-        <div class="p-6 flex-1 overflow-y-auto no-scrollbar" id="slip-items">
-            <div class="text-center py-10 text-slate-400" id="slip-empty">
-                <i class="fa-solid fa-basketball text-6xl opacity-20 mb-4"></i>
-                <p class="font-bold">Select basketball games to bet</p>
-            </div>
-            <div id="active-selections" class="space-y-4 hidden"></div>
-        </div>
+  // Fade-in on scroll
+  const fadeEls = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  fadeEls.forEach(el => observer.observe(el));
 
-        <div class="p-6 bg-slate-50 border-t border-slate-200 hidden" id="slip-summary">
-            <div class="flex justify-between mb-4">
-                <span class="text-slate-500 font-bold uppercase text-xs tracking-widest">Total Odds</span>
-                <span class="font-black text-royal-500 text-xl" id="slip-odds">0.00</span>
-            </div>
-            <div class="flex gap-4 mb-6">
-                <div class="flex-1 bg-white p-3 rounded-2xl border-2 border-slate-200 focus-within:border-royal-500 transition">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Stake (ZAR)</p>
-                    <input type="number" id="stake-amount" value="100" oninput="updateReturn()" class="w-full bg-transparent font-black text-lg outline-none">
-                </div>
-                <div class="flex-1 bg-royal-100/30 p-3 rounded-2xl border border-royal-200">
-                    <p class="text-[10px] font-bold text-royal-600 uppercase mb-1">Returns</p>
-                    <p class="font-black text-lg text-royal-700" id="slip-return">R 0.00</p>
-                </div>
-            </div>
-            <button onclick="placeBet()" class="w-full bg-royal-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-royal-500/40 hover:bg-royal-600 active:scale-95 transition-all uppercase tracking-widest">
-                Place Bet Now
-            </button>
-        </div>
-    </div>
+  // Form submit handler
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.btn-submit');
+    btn.textContent = '✓ Message Sent!';
+    btn.style.background = '#27ae60';
+    setTimeout(() => {
+      btn.innerHTML = 'Send Message <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>';
+      btn.style.background = '';
+      e.target.reset();
+    }, 3000);
+  }
 
-    <script>
-        const API_KEY = "d7a9fab6d8a9c0d575b95e071332c189";
-        let matches = [];
-        let slip = [];
-        let betHistory = [];
-        let balance = 1250.00;
-        let currentLeagueFilter = 'All';
+  // Animate stat numbers on scroll
+  const statNums = document.querySelectorAll('.stat-num');
+  const statObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.animation = 'statPop 0.5s cubic-bezier(0.34,1.56,0.64,1) both';
+        statObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  statNums.forEach(el => statObserver.observe(el));
 
-        // --- Navigation Logic ---
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-view').forEach(el => el.classList.remove('active'));
-            document.getElementById(`view-${tabId}`).classList.add('active');
-
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('text-royal-500');
-                btn.classList.add('text-slate-400');
-            });
-            document.getElementById(`nav-${tabId}`).classList.remove('text-slate-400');
-            document.getElementById(`nav-${tabId}`).classList.add('text-royal-500');
-            
-            if(tabId === 'history') renderHistory();
-        }
-
-        // --- Mock Wallet Logic ---
-        function toggleDepositModal() {
-            const modal = document.getElementById('deposit-modal');
-            const card = document.getElementById('deposit-card');
-            
-            if (modal.classList.contains('opacity-0')) {
-                modal.classList.remove('opacity-0', 'pointer-events-none');
-                setTimeout(() => card.classList.remove('scale-95'), 10);
-            } else {
-                card.classList.add('scale-95');
-                setTimeout(() => modal.classList.add('opacity-0', 'pointer-events-none'), 150);
-            }
-        }
-
-        function setDepositAmount(amount) {
-            document.getElementById('deposit-amount').value = amount;
-        }
-
-        function updateBalanceDisplays() {
-            const formatted = `R ${balance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.querySelectorAll('.user-balance-display').forEach(el => el.innerText = formatted);
-        }
-
-        function processMockDeposit() {
-            const amount = parseFloat(document.getElementById('deposit-amount').value);
-            if (isNaN(amount) || amount <= 0) return alert("Please enter a valid amount.");
-
-            balance += amount;
-            updateBalanceDisplays();
-            toggleDepositModal();
-            document.getElementById('deposit-amount').value = '';
-            showToast(`Loaded R ${amount.toFixed(2)} Successfully!`);
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('success-toast');
-            document.getElementById('toast-msg').innerText = message;
-            toast.classList.remove('opacity-0', 'pointer-events-none');
-            toast.classList.add('bet-success-toast');
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'pointer-events-none');
-                toast.classList.remove('bet-success-toast');
-            }, 3000);
-        }
-
-        // --- Fetch & Render Basketball API ---
-        async function fetchMatches() {
-            const feed = document.getElementById('matches-feed');
-            const icon = document.getElementById('refresh-icon');
-            icon.classList.add('fa-spin');
-
-            try {
-                // Using Basketball API endpoint
-                const todayDate = new Date().toISOString().split('T')[0];
-                const response = await fetch(`https://v1.basketball.api-sports.io/games?date=${todayDate}`, {
-                    headers: { 'x-apisports-key': API_KEY }
-                });
-                const data = await response.json();
-                matches = data.response || [];
-                
-                generateLeagueFilters(matches);
-                filterAndRender();
-            } catch (err) {
-                feed.innerHTML = `<p class="text-center text-red-500 font-bold p-10">Error loading basketball games. Check API key.</p>`;
-            } finally {
-                icon.classList.remove('fa-spin');
-            }
-        }
-
-        function generateLeagueFilters(data) {
-            const filterContainer = document.getElementById('league-filters');
-            const uniqueLeagues = [...new Set(data.map(m => m.league.name))].sort();
-            
-            let html = `<button onclick="setLeagueFilter('All')" class="league-btn px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${currentLeagueFilter === 'All' ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-500 border-slate-200'}">🏀 All Leagues</button>`;
-
-            uniqueLeagues.forEach(league => {
-                const isActive = currentLeagueFilter === league;
-                html += `<button onclick="setLeagueFilter('${league.replace(/'/g, "\\'")}')" class="league-btn px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${isActive ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-500 border-slate-200'}">${league}</button>`;
-            });
-            filterContainer.innerHTML = html;
-        }
-
-        function setLeagueFilter(league) {
-            currentLeagueFilter = league;
-            generateLeagueFilters(matches);
-            document.getElementById('feed-title').innerText = league === 'All' ? 'All Basketball Games' : league;
-            filterAndRender();
-        }
-
-        function filterAndRender() {
-            let filtered = matches;
-            if (currentLeagueFilter !== 'All') filtered = matches.filter(m => m.league.name === currentLeagueFilter);
-
-            const term = document.getElementById('match-search').value.toLowerCase();
-            if (term) {
-                filtered = filtered.filter(m => m.teams.home.name.toLowerCase().includes(term) || m.teams.away.name.toLowerCase().includes(term) || m.league.name.toLowerCase().includes(term));
-            }
-            renderMatches(filtered);
-        }
-
-        function renderMatches(data) {
-            const feed = document.getElementById('matches-feed');
-            feed.innerHTML = '';
-
-            if(data.length === 0) {
-                feed.innerHTML = `<div class="bg-white p-10 rounded-3xl text-center border-2 border-dashed border-slate-200"><p class="text-slate-400 font-bold">No games found.</p></div>`;
-                return;
-            }
-
-            data.forEach((m, idx) => {
-                const home = m.teams.home;
-                const away = m.teams.away;
-                const statusShort = m.status.short;
-                const league = m.league.name;
-                const country = m.country ? m.country.name : '';
-                
-                let statusBadge = '';
-                let homeScore = m.scores.home.total !== null ? m.scores.home.total : '-';
-                let awayScore = m.scores.away.total !== null ? m.scores.away.total : '-';
-
-                if (statusShort === 'NS' || statusShort === 'TBD') {
-                    const matchTime = new Date(m.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                    statusBadge = `<span class="bg-slate-100 text-slate-600 text-[10px] font-black px-2 py-1 rounded-lg border border-slate-200">Upcoming ${matchTime}</span>`;
-                } else if (['FT', 'AOT'].includes(statusShort)) {
-                    statusBadge = `<span class="bg-slate-800 text-white text-[10px] font-black px-2 py-1 rounded-lg">FT</span>`;
-                } else {
-                    statusBadge = `<span class="bg-red-50 text-red-600 border border-red-100 text-[10px] font-black px-2 py-1 rounded-lg flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.5)]"></span> Live</span>`;
-                }
-
-                // Mock odds for basketball (1 = Home, 2 = Away)
-                const o1 = (1.1 + Math.random() * 2).toFixed(2);
-                const o2 = (1.1 + Math.random() * 2).toFixed(2);
-
-                const card = `
-                    <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-200 animate-match" style="animation-delay: ${Math.min(idx * 0.05, 0.5)}s">
-                        <div class="flex justify-between items-center mb-4 border-b border-slate-50 pb-3">
-                            <div class="flex flex-col">
-                                <span class="text-[11px] font-black text-slate-800 uppercase tracking-tighter truncate max-w-[150px]">${league}</span>
-                                <span class="text-[9px] font-bold text-slate-400 uppercase">${country}</span>
-                            </div>
-                            ${statusBadge}
-                        </div>
-                        <div class="flex justify-between items-center px-2 mb-6">
-                            <div class="flex flex-col items-center gap-2 w-1/3">
-                                <div class="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center p-2 border border-slate-100">
-                                    <img src="${home.logo}" class="w-full h-full object-contain" onerror="this.src='https://via.placeholder.com/50?text=Home'">
-                                </div>
-                                <p class="text-[11px] font-bold text-center leading-tight line-clamp-2">${home.name}</p>
-                            </div>
-                            <div class="flex flex-col items-center w-1/3">
-                                <p class="text-3xl font-black text-royal-500 tracking-tighter">${homeScore} <span class="text-slate-300 text-lg">-</span> ${awayScore}</p>
-                            </div>
-                            <div class="flex flex-col items-center gap-2 w-1/3">
-                                <div class="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center p-2 border border-slate-100">
-                                    <img src="${away.logo}" class="w-full h-full object-contain" onerror="this.src='https://via.placeholder.com/50?text=Away'">
-                                </div>
-                                <p class="text-[11px] font-bold text-center leading-tight line-clamp-2">${away.name}</p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3 bg-slate-50 p-1.5 rounded-3xl border border-slate-100">
-                            ${oddBtn(m.id, home.name, o1, 'Home')}
-                            ${oddBtn(m.id, away.name, o2, 'Away')}
-                        </div>
-                    </div>
-                `;
-                feed.insertAdjacentHTML('beforeend', card);
-            });
-        }
-
-        function oddBtn(id, name, val, label) {
-            const isActive = slip.some(b => b.id === `${id}-${name}`);
-            return `
-                <button onclick="addToSlip('${id}', '${name.replace(/'/g, "\\'")}', ${val}, this)" 
-                        class="odd-trigger group flex flex-col items-center py-2.5 rounded-[1.25rem] transition-all 
-                        ${isActive ? 'bg-royal-500 text-white shadow-md shadow-royal-500/20' : 'bg-white text-slate-800 hover:bg-slate-100 border border-slate-200'}">
-                    <span class="text-[9px] font-bold ${isActive ? 'text-royal-100' : 'text-slate-400'} uppercase tracking-wider">${label}</span>
-                    <span class="font-black text-sm">${val}</span>
-                </button>
-            `;
-        }
-
-        // --- Bet Slip & History Logic ---
-        function addToSlip(mId, selection, odds) {
-            const bId = `${mId}-${selection}`;
-            const exists = slip.findIndex(b => b.id === bId);
-            if(exists > -1) slip.splice(exists, 1);
-            else slip.push({ id: bId, selection, odds });
-            
-            updateSlipUI();
-            filterAndRender();
-        }
-
-        function updateSlipUI() {
-            const count = document.getElementById('slip-count');
-            const empty = document.getElementById('slip-empty');
-            const active = document.getElementById('active-selections');
-            const summary = document.getElementById('slip-summary');
-            
-            count.innerText = slip.length;
-            count.classList.toggle('hidden', slip.length === 0);
-            
-            if(slip.length === 0) {
-                empty.classList.remove('hidden');
-                active.classList.add('hidden');
-                summary.classList.add('hidden');
-            } else {
-                empty.classList.add('hidden');
-                active.classList.remove('hidden');
-                summary.classList.remove('hidden');
-                
-                active.innerHTML = slip.map((b, i) => `
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 flex justify-between items-center shadow-sm">
-                        <div class="max-w-[60%]">
-                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Selection</p>
-                            <p class="font-black text-slate-800 truncate">${b.selection}</p>
-                        </div>
-                        <div class="text-right flex-1">
-                            <p class="text-[10px] font-bold text-royal-500 uppercase tracking-wider">Odds</p>
-                            <p class="font-black text-lg leading-none">${b.odds}</p>
-                        </div>
-                        <button onclick="removeFromSlip(${i})" class="text-slate-300 hover:text-red-500 ml-4 p-2 transition bg-slate-50 rounded-full"><i class="fa-solid fa-trash-can"></i></button>
-                    </div>
-                `).join('');
-            }
-            updateReturn();
-        }
-
-        function updateReturn() {
-            const oddsEl = document.getElementById('slip-odds');
-            const returnEl = document.getElementById('slip-return');
-            const stake = parseFloat(document.getElementById('stake-amount').value) || 0;
-            
-            const totalOdds = slip.reduce((acc, curr) => acc * curr.odds, 1);
-            oddsEl.innerText = slip.length > 0 ? totalOdds.toFixed(2) : '0.00';
-            returnEl.innerText = `R ${(totalOdds * stake).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            return { totalOdds, returnAmt: totalOdds * stake };
-        }
-
-        function removeFromSlip(idx) {
-            slip.splice(idx, 1);
-            updateSlipUI();
-            filterAndRender();
-        }
-
-        function toggleSlip() {
-            const drawer = document.getElementById('slip-drawer');
-            const overlay = document.getElementById('slip-overlay');
-            drawer.classList.toggle('translate-y-full');
-            overlay.classList.toggle('opacity-0');
-            overlay.classList.toggle('pointer-events-none');
-        }
-
-        function placeBet() {
-            const stake = parseFloat(document.getElementById('stake-amount').value);
-            if(stake > balance) {
-                alert("Insufficient funds! Tap 'Load Funds' in the header.");
-                return;
-            }
-            if(slip.length === 0) return;
-
-            const calc = updateReturn();
-            
-            // Deduct and update UI
-            balance -= stake;
-            updateBalanceDisplays();
-            
-            // Push to History
-            const timestamp = new Date().toLocaleString([], {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
-            betHistory.unshift({
-                date: timestamp,
-                stake: stake,
-                odds: calc.totalOdds.toFixed(2),
-                returns: calc.returnAmt,
-                items: [...slip]
-            });
-
-            // Update Profile Stats
-            document.getElementById('profile-total-bets').innerText = betHistory.length;
-
-            toggleSlip();
-            showToast('Bet Placed Successfully!');
-
-            setTimeout(() => {
-                slip = [];
-                updateSlipUI();
-                filterAndRender();
-            }, 300);
-        }
-
-        function renderHistory() {
-            const feed = document.getElementById('history-feed');
-            if(betHistory.length === 0) return;
-
-            feed.innerHTML = betHistory.map((bet, i) => `
-                <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm animate-match" style="animation-delay: ${i * 0.05}s">
-                    <div class="flex justify-between items-center mb-4 border-b border-slate-50 pb-3">
-                        <span class="text-xs font-bold text-slate-500">${bet.date}</span>
-                        <span class="bg-amber-50 text-amber-600 border border-amber-100 text-[10px] font-black px-2 py-1 rounded-lg">Pending</span>
-                    </div>
-                    
-                    <div class="space-y-2 mb-4">
-                        ${bet.items.map(item => `
-                            <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                                <span class="text-sm font-bold text-slate-700 truncate pr-2">${item.selection}</span>
-                                <span class="font-black text-royal-500">${item.odds}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-
-                    <div class="flex justify-between items-end pt-2 border-t border-slate-50">
-                        <div>
-                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Stake</p>
-                            <p class="font-bold text-slate-800">R ${bet.stake.toFixed(2)}</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Potential Return</p>
-                            <p class="font-black text-lg text-emerald-600">R ${bet.returns.toFixed(2)}</p>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        document.getElementById('match-search').addEventListener('input', filterAndRender);
-        updateBalanceDisplays(); // Init balance text
-        fetchMatches();
-        setInterval(fetchMatches, 60000);
-    </script>
+  // Inject stat pop keyframe
+  const style = document.createElement('style');
+  style.textContent = `@keyframes statPop { from { transform: scale(0.7); opacity:0; } to { transform: scale(1); opacity:1; } }`;
+  document.head.appendChild(style);
+</script>
 </body>
 </html>
